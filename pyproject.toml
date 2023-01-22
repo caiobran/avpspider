@@ -9,6 +9,8 @@ repository = "https://github.com/caiobran/AVPspider"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+scrapy = "^2.7.1"
+selenium = "^4.7.2"
 
 
 [build-system]
