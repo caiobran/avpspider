@@ -91,30 +91,19 @@ class AvpspiderDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        url = [
-            'https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx'
-        ]
+        url = ['https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx']
 
-        if request.url == url[0]:
+        if request.url != url[0]:
+            return None
 
-            driver.get(request.url)
+        driver.get(request.url)
+        WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(=(By.XPATH, "img")))
+        body = driver.page_source
+        htmlresponse = HtmlResponse(driver.current_url, body=body, encoding='utf-8', request=request)
 
-            #WebDriverWait(driver, 10).until(
-            #    EC.presence_of_all_elements_located()
-            #)
+        return htmlresponse
 
-            body = driver.page_source
 
-            htmlresponse = HtmlResponse(
-                driver.current_url,
-                body=body,
-                encoding='utf-8',
-                request=request
-            )
-
-            return htmlresponse
-
-        return None
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
