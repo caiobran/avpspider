@@ -95,13 +95,13 @@ class AvpspiderDownloaderMiddleware:
             'https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx'
         ]
 
-        if request.url == url[1]:
+        if request.url == url[0]:
 
             driver.get(request.url)
 
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_all_elements_located()
-            )
+            #WebDriverWait(driver, 10).until(
+            #    EC.presence_of_all_elements_located()
+            #)
 
             body = driver.page_source
 
