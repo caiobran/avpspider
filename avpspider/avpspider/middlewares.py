@@ -10,7 +10,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
@@ -93,15 +92,21 @@ class AvpspiderDownloaderMiddleware:
         #   installed downloader middleware will be called
         url = ['https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx']
 
-        if request.url != url[0]:
-            return None
+        if request.url == url[0]:
 
-        driver.get(request.url)
-        WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(=(By.XPATH, "img")))
-        body = driver.page_source
-        htmlresponse = HtmlResponse(driver.current_url, body=body, encoding='utf-8', request=request)
+            driver.get(request.url)
 
-        return htmlresponse
+            # WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(=(By.XPATH, "img")))
+
+            title = driver.title
+            body = driver.page_source
+
+            htmlresponse = HtmlResponse(driver.current_url, body=body, encoding='utf-8', request=request)
+
+            spider.logger.info("'Spider opened: %s' % title")
+
+            return htmlresponse
+
 
 
 
