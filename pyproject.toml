@@ -11,6 +11,7 @@ repository = "https://github.com/caiobran/AVPspider"
 python = "^3.8"
 scrapy = "^2.7.1"
 selenium = "^4.7.2"
+webdriver-manager = "^3.8.5"
 
 
 [build-system]

@@ -8,7 +8,10 @@ class QuoteSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+
         filename = f'avpamerica.html'
+
         with open(filename, 'wb') as f:
             f.write(response.body)
-        self.log(f'Saved file {filename}')
+
+        self.logger.info(f'Saved file {filename}')

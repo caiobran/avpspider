@@ -5,20 +5,25 @@
 
 from scrapy import signals
 from scrapy.http import HtmlResponse
+
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
+#from itemadapter import is_item, ItemAdapter
 
 
 # initialize selenium driver
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
-options.add_argument('window-size=900x600')
-driver = webdriver.Chrome(chrome_options=options)
+#options.add_argument('headless')
+options.add_argument('start-maximized')
+service = ChromeService(executable_path=ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, chrome_options=options)
+#driver = webdriver.Chrome(chrome_options=options)
 
 
 class AvpspiderSpiderMiddleware:
@@ -90,25 +95,41 @@ class AvpspiderDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        url = ['https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx']
 
-        if request.url == url[0]:
+        urls = [
+            'https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx'
+        ]
 
+        if request.url == urls[0]:
+
+            # Navigate to AVP America page
             driver.get(request.url)
 
-            # WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(=(By.XPATH, "img")))
+            # Wait for the "Refresh Rankings" button to load
+            wait = WebDriverWait(driver, 5)
+            locator = (By.XPATH, '//*[(@id = "btnSubmit")]')
+            el_refresh = wait.until(EC.element_to_be_clickable(locator))
 
-            title = driver.title
-            body = driver.page_source
+            # Click the "Refresh Rankings" button
+            el_refresh.click()
 
-            htmlresponse = HtmlResponse(driver.current_url, body=body, encoding='utf-8', request=request)
+            # Wait for table 2 (all avp players) to load
+            locator = (By.XPATH, '//*[@id="Table2"]')
+            wait.until(EC.presence_of_element_located(locator))
 
-            spider.logger.info("'Spider opened: %s' % title")
+            # Create Response object
+            htmlresponse = HtmlResponse(
+                driver.current_url,
+                body=driver.page_source,
+                encoding='utf-8',
+                request=request
+            )
+
+            spider.logger.info('Spider opened: %s' % driver.title)
 
             return htmlresponse
 
-
-
+        return None
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
