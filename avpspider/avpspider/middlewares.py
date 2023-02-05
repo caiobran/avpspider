@@ -19,11 +19,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # initialize selenium driver
 options = webdriver.ChromeOptions()
-#options.add_argument('headless')
+options.add_argument('headless')
 options.add_argument('start-maximized')
 service = ChromeService(executable_path=ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, chrome_options=options)
-#driver = webdriver.Chrome(chrome_options=options)
 
 
 class AvpspiderSpiderMiddleware:
