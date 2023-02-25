@@ -125,7 +125,7 @@ class AvpspiderDownloaderMiddleware:
                 request=request
             )
 
-            spider.logger.info('Spider opened: %s' % driver.title)
+            spider.logger.info('driver opened: %s' % driver.title)
 
             return htmlresponse
 

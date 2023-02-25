@@ -1,12 +1,17 @@
 import scrapy
 
-class QuoteSpider(scrapy.Spider):
+class AVPamericaSpider(scrapy.Spider):
+
+    # Name of the spider
     name = 'avpamerica'
 
-    start_urls = [
-        'https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx'
-    ]
+    # The domain to be scraped
+    allowed_domains = ['avpamerica.com']
 
+    # The URLs to be scraped from the domain
+    start_urls = ['https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx']
+
+    # Default callback method
     def parse(self, response):
 
         filename = f'avpamerica.html'
