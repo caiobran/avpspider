@@ -1,4 +1,4 @@
-# AVPspider
+# avpspider
 Scrapy spider to scrape AVP data from avpamerica.com
 
 ## Requirements
