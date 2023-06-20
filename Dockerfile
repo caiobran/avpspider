@@ -12,9 +12,9 @@ RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >
 RUN apt-get update && apt-get install -y google-chrome-stable
 
 # Install project dependencies using Poetry
+WORKDIR /app/avpspider
 RUN pip install poetry
 RUN poetry install --no-interaction --no-ansi
 
 # Set the default command to run the project
-WORKDIR /app/avpspider
 CMD ["scrapy", "crawl", "avpamerica"]

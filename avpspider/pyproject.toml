@@ -5,7 +5,7 @@ description = "Scrapes data from AVP americas website"
 authors = ["caiobran <caiobran88@gmail.com>"]
 readme = "README.md"
 license = "GPL-3.0-only"
-repository = "https://github.com/caiobran/AVPspider"
+repository = "https://github.com/caiobran/avpspider"
 
 [tool.poetry.dependencies]
 python = "^3.8"
