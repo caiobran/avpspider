@@ -10,7 +10,8 @@
             "request": "launch",
             "module": "scrapy",
             "args": ["crawl", "avpamerica"],
-            "cwd": "${workspaceFolder}/avpspider"
+            "cwd": "${workspaceFolder}/avpspider",
+            "console": "integratedTerminal"
         }
     ]
 }
