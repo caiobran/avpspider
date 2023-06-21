@@ -117,7 +117,7 @@ class AvpspiderDownloaderMiddleware:
 
             # Wait for table 2 (all avp players) to load
             locator = (By.XPATH, '//*[@id="Table2"]')
-            wait.until(EC.presence_of_element_located(locator))
+            tbl = wait.until(EC.presence_of_element_located(locator))
 
             # Create Response object
             htmlresponse = HtmlResponse(

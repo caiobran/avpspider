@@ -4,9 +4,29 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from dataclasses import dataclass, field
+from typing import Optional
 
 
-class AvpspiderItem(scrapy.Item):
+@dataclass
+class AvpLink:
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    url:    Optional[str] = field(default=None)
+    body:   Optional[str] = field(default=None)
+    header: Optional[str] = field(default=None)
+    status: Optional[int] = field(default=None)
+    
+
+@dataclass
+class AvpPlayerRank:
+    # define the fields for your item here like:
+    name:     Optional[str] = field(default=None)
+    hometown: Optional[str] = field(default=None)
+    rank:     Optional[int] = field(default=None)
+    points:   Optional[int] = field(default=None)
+    
+
+#class AvpspiderItem(scrapy.Item):
+    # define the fields for your item here like:
+    #name = scrapy.Field()
+    #pass
