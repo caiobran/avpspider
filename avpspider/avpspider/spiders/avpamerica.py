@@ -1,4 +1,5 @@
 import scrapy
+import os
 
 class AVPamericaSpider(scrapy.Spider):
 
@@ -14,9 +15,10 @@ class AVPamericaSpider(scrapy.Spider):
     # Default callback method
     def parse(self, response):
 
+        filedir = os.getcwd()
         filename = f'avpamerica.html'
 
         with open(filename, 'wb') as f:
             f.write(response.body)
 
-        self.logger.info(f'Saved file {filename}')
+        self.logger.info(f'Saved file {filedir}/{filename}')

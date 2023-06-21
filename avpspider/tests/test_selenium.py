@@ -1,4 +1,5 @@
 import logging
+import os
 
 logging.basicConfig(
     # filename='app.log', 
@@ -55,9 +56,10 @@ logging.info("----- CLOSE URL -----")
 driver.quit()
 
 # Save html file
+filedir = os.getcwd()
 filename = f'avpamerica.html'
 
 with open(filename, 'wb') as f:
     f.write(source_code)
 
-logging.info(f'Saved file {filename}')
+logging.info(f'Saved file {filedir}/{filename}')
