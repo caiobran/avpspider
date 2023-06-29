@@ -21,20 +21,35 @@ class AVPamericaSpider(scrapy.Spider):
     # Default callback method
     def parse(self, response):
 
-        sel = Selector(text=response.body)
+        yield {
+            'date': response.headers['Date'],
+            'title': response.xpath('//html/head/title/text()').get().strip(),
+            'url': response.url,
+            'status': response.status,
+            'headers': response.headers,
+            'enconding': response.encoding,
+            'text': response.text
+        }
 
-        a_tags = sel.xpath('//a')
+        # Get rows of player rank table
+        query = '//*[@id="Table2"]/tbody/tr[not(./th) and not(./td[@colspan])]'
+        tbl_rows = response.xpath(query).getall()
 
-        # Parse player ranking table
-        #rank = sel.xpath('//*[@id="Table2"]/tbody/tr/td[1]')
-        #name = sel.xpath('//*[@id="Table2"]/tbody/tr/td[2]')
-        #hometown = sel.xpath('//*[@id="Table2"]/tbody/tr/td[3]')
-        #points = sel.xpath('//*[@id="Table2"]/tbody/tr/td[4]')
+        # Get player profile links
+        query = '//*[@id="Table2"]/tbody/tr/td[1][not(@colspan)]'
+        player_ranks = response.xpath(query).getall()
+
+        query = '//*[@id="Table2"]/tbody/tr/td[2]'
+        player_names = response.xpath(query).getall()
+
+        query = '//*[@id="Table2"]/tbody/tr/td[2]/span/a/@href'
+        player_links = response.xpath(query).getall()
+
+        query = '//*[@id="Table2"]/tbody/tr/td[3]'
+        player_hometowns = response.xpath(query).getall()
+
+        query = '//*[@id="Table2"]/tbody/tr/td[4]'
+        player_points = response.xpath(query).getall()
         
-        # Save html reponse to file
-        #filedir = os.getcwd()
-        #filename = f'avpamerica.html'
-        #filepath = os.path.join(filedir, filename)
-        #with open(filename, 'wb') as f:
-        #    f.write(response.body)
-        #self.logger.info(f'Saved file {filepath}')
+
+        self.logger.info(f'Parsed URL: {response.url}')

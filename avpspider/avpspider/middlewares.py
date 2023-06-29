@@ -18,14 +18,15 @@ from webdriver_manager.chrome import ChromeDriverManager
 #from itemadapter import is_item, ItemAdapter
 
 
-# initialize selenium driver
+# Set Chrome driver options
 options = webdriver.ChromeOptions()
-# options.add_argument('start-maximized')
+#options.add_argument('start-maximized')
 options.add_argument('headless')
 options.add_argument('no-sandbox')
 options.add_argument('disable-dev-shm-usage')
-service = ChromeService(executable_path=ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=options)
+
+# Install Chrome driver
+chrome_path = ChromeDriverManager().install()
 
 
 class AvpspiderSpiderMiddleware:
@@ -98,11 +99,13 @@ class AvpspiderDownloaderMiddleware:
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
 
-        urls = [
-            'https://avpamerica.com/VA-Beach-Volleyball-Player-Rankings.aspx'
-        ]
+        # Use selenium to press the refresh btn to show the player rank table
+        if 'VA-Beach-Volleyball-Player-Rankings.aspx' in request.url:
 
-        if request.url == urls[0]:
+            # initialize selenium driver
+            service = ChromeService(executable_path=chrome_path)
+            driver = webdriver.Chrome(service=service, options=options)
+            spider.logger.info(f'Chrome driver started: {chrome_path}')
 
             # Navigate to AVP America page
             driver.get(request.url)
@@ -118,6 +121,7 @@ class AvpspiderDownloaderMiddleware:
             # Wait for table 2 (all avp players) to load
             locator = (By.XPATH, '//*[@id="Table2"]')
             tbl = wait.until(EC.presence_of_element_located(locator))
+            spider.logger.info('Page opened: %s' % driver.title)
 
             # Create Response object
             htmlresponse = HtmlResponse(
@@ -127,7 +131,8 @@ class AvpspiderDownloaderMiddleware:
                 request=request
             )
 
-            spider.logger.info('driver opened: %s' % driver.title)
+            driver.quit()
+            spider.logger.info('Chrome driver closed')
 
             return htmlresponse
 
